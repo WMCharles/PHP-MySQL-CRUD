@@ -1,14 +1,10 @@
 <?php
-// variables 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "contacts";
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once('config/db.php'); // Load config file
+
+// SQL query 
+$sql = "SELECT * FROM friends";
+$result = $conn->query($sql);
 
 ?>
 <!DOCTYPE html>
@@ -40,24 +36,20 @@ if ($conn->connect_error) {
                                 <th scope="col">Phone Number</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+                                <?php
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                        <tr>
+                                            <th scope="row"><?php echo $row['id'];?></th>
+                                            <td><?php echo $row['name'];?></td>
+                                            <td><?php echo $row['email'];?></td>
+                                            <td><?php echo $row['phone_number'];?></td>
+                                        </tr>
+                                <?php
+                                    }
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
